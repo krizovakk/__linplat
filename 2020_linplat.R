@@ -4,9 +4,12 @@
 # install.packages("readxl")
 # install.packages("reshape2")
 
-require(tidyverse)
-require(readxl)
-require(reshape2)
+require(tidyverse) #zakladni balik  
+require(readxl) #nacitani excelovych tabulek
+require(reshape2) #prevod na long format
+require(easynls) #linplat model auto
+library(rcompanion) #plotPredy / manual linplat
+
 
 sb <- read_excel("red/linplat.xlsx") #sb = sugar beet
 sb$n <- paste(sb$dose, sb$treat, sep = "_")
@@ -49,7 +52,7 @@ ggsave("top_ordered.png", path = "plots", height = 6, width = 9, dpi = 300)
 # linplat model -----------------------------------------------------------
 
 # install.packages("easynls")
-require(easynls)
+#require(easynls)
 
 ## create dataframe for TUBER
 df_tube <- data.frame(tube$dose, tube$tuber)
@@ -78,7 +81,7 @@ nlsplot(df_top, model=3, xlab = "N dose [kg ha-1]", ylab = "top yield [t ha-1]")
 ## https://rcompanion.org/handbook/I_11.html
 
 # install.packages("rcompanion") # quite long installation, 5 minutes
-library(rcompanion) # for plot part
+#library(rcompanion) # for plot part
 
 ## TOP
 
@@ -173,9 +176,11 @@ mtext("y = 54.0439+0.0671(x-183.0802)", side = 3, line = 1,
 
 # base --------------------------------------------------------------------
 
-require(tidyverse)
-require(readxl)
-require(reshape2)
+require(tidyverse) #zakladni balik  
+require(readxl) #nacitani excelovych tabulek
+require(reshape2) #prevod na long format
+require(easynls) #linplat model auto
+library(rcompanion) #plotPredy / manual linplat
 
 sb <- read_excel("red/linplat.xlsx") 
 sb$n <- paste(sb$dose, sb$treat, sep = "_")
@@ -261,7 +266,7 @@ ggsave("top_fym.png", path = "plots", height = 6, width = 9, dpi = 300)
 # linplat model -----------------------------------------------------------
 
 #install.packages("easynls")
-require(easynls)
+#require(easynls)
 
 ## create dataframes for linplat model
 
@@ -302,7 +307,7 @@ nlsplot(df_top_fym, model=3,
 ## https://rcompanion.org/handbook/I_11.html
 
 # install.packages("rcompanion") # quite long installation, 5 minutes
-library(rcompanion) # for plot part
+#library(rcompanion) # for plot part
 
 ## TOP NPK / done
 
@@ -331,8 +336,8 @@ plotPredy(data  = top_npk,
           y     = top,
           model = model_topnpk,
           main  = "NPK",
-          xlab  = "N dose [kg.ha-1]",
-          ylab  = "top yield [t.ha-1]",
+          xlab  = "N dose [kg/ha]",
+          ylab  = "top yield [t/ha]",
           xaxt  = "n",
           cex   = 1.3,
           cex.lab=1.3, 
@@ -371,9 +376,42 @@ model_topfym = nls(top ~ linplat(dose, a, b, clx), # Find best fit parameters
 
 summary(model_topfym)
 
+### model is not functional; solution:
 
+# install.packages("FertBoot")
+require(FertBoot)
 
+tf <- read_excel("red/top_fym.xlsx")   
 
+df_top_fym <- data.frame(top_fym$dose, top_fym$top) 
+
+f_mod <- f.linear.plateau(
+  df_top_fym,
+  start = list(a = 17.4, b = 0.039, c = 180.833),
+  plus_minus = 10,
+  n.start = 1000,
+  msg = TRUE)
+
+summary(f_mod$nls.model)
+
+plotPredy(data  = tf,
+          x     = dose,
+          y     = top,
+          model = f_mod$nls.model,
+          main  = "FYM",
+          xlab  = "N dose [kg/ha]",
+          ylab  = "top yield [t/ha]",
+          xaxt  = "n",
+          cex   = 1.3,
+          cex.lab=1.3, 
+          cex.axis=1.2, 
+          cex.main=1.3)
+
+axis(1, at = tf$dose, labels = tf$dose, 
+     las = 1, cex.axis = 1.1)
+#text(40,33, "y = 17.4037+0.0639(x-122.2971)", col = "blue", cex=0.9)
+mtext("y = 17.4037+0.0339(x-180.8333)", side = 3, line = 0,
+      outer = FALSE, cex = 1, col = "blue")
   
 
 ## TUBE FYM / done
@@ -403,8 +441,8 @@ plotPredy(data  = tube_fym,
           y     = tuber,
           model = model_tubefym,
           main  = "FYM",
-          xlab  = "N dose [kg.ha-1]",
-          ylab  = "tuber yield [t.ha-1]",
+          xlab  = "N dose [kg/ha]",
+          ylab  = "tuber yield [t/ha]",
           xaxt  = "n", 
           cex   = 1.3,
           cex.lab=1.3, 
@@ -445,8 +483,8 @@ plotPredy(data  = tube_npk,
           y     = tuber,
           model = model_tubenpk,
           main  = "NPK",
-          xlab  = "N dose [kg.ha-1]", 
-          ylab  = "tuber yield [t.ha-1]",
+          xlab  = "N dose [kg/ha]", 
+          ylab  = "tuber yield [t/ha]",
           xaxt  = "n",
           cex   = 1.3,
           cex.lab=1.3, 
@@ -511,8 +549,8 @@ plotPredy(data  = tf,
           y     = top,
           model = f_mod$nls.model,
           main  = "FYM",
-          xlab  = "N dose [kg.ha-1]",
-          ylab  = "top yield [t.ha-1]",
+          xlab  = "N dose [kg/ha]",
+          ylab  = "top yield [t/ha]",
           xaxt  = "n",
           cex   = 1.3,
           cex.lab=1.3, 
@@ -533,8 +571,8 @@ plotPredy(data  = tf,
           y     = top,
           model = f_mod$nls.model,
           main  = "FYM",
-          xlab  = "N dose [kg.ha-1]",
-          ylab  = "top yield [t.ha-1]",
+          xlab  = "N dose [kg/ha]",
+          ylab  = "top yield [t/ha]",
           xaxt  = "n",
           cex   = 2,
           cex.lab=2, 
@@ -555,8 +593,8 @@ mtext("y = 17.4+0.0339(x-180.8333)", side = 3, line = 0,
 #                     22.751323, 24.761905, 30.070547, 33.42151, 30.458554, 36.437390,
 #                     9.003527,  9.576720, 13.209877, 13.527337, 13.280423, 13.756614),
 #           model = f_mod$nls.model,
-#           xlab  = "FYM / N dose [kg.ha-1]",
-#           ylab  = "top yield [t.ha-1]")
+#           xlab  = "FYM / N dose [kg/ha]",
+#           ylab  = "top yield [t/ha]")
 
 
   
