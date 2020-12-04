@@ -331,14 +331,16 @@ model_topnpk = nls(top ~ linplat(dose, a, b, clx), # Find best fit parameters
 
 summary(model_topnpk)
 
+# par(oma=c(0,1,0,0))
+par(mar=c(4,5,3,2))
 plotPredy(data  = top_npk,
           x     = dose,
           y     = top,
           model = model_topnpk,
           main  = "NPK",
-          xlab  = "N dose [kg/ha]",
-          ylab  = "top yield [t/ha]",
-          xaxt  = "n",
+          xlab  = expression("N dose [ kg."~ha^-1~"]"),
+          ylab  = expression("top yield [ t."~ha^-1~"]"),
+          xaxt  = "n", #expression("Saturated Hydraulic Conductivity [ mm"~ h^-1~"]")
           cex   = 1.3,
           cex.lab=1.3, 
           cex.axis=1.2, 
@@ -349,6 +351,9 @@ axis(1, at = top_npk$dose, labels = top_npk$dose,
 #text(40,33, "y = 17.4037+0.0639(x-122.2971)", col = "blue", cex=0.9)
 mtext("y = 17.4037+0.0639(x-122.2971)", side = 3, line = 0,
       outer = FALSE, cex = 1, col = "blue")
+
+dev.copy(device = png, filename = 'plots/npk_top.png', width = 450, height = 300) 
+dev.off()
 
 # 
 ## TOP FYM /// TO BE SOLVED LATER
@@ -394,13 +399,14 @@ f_mod <- f.linear.plateau(
 
 summary(f_mod$nls.model)
 
+par(mar=c(4,5,3,2))
 plotPredy(data  = tf,
           x     = dose,
           y     = top,
           model = f_mod$nls.model,
           main  = "FYM",
-          xlab  = "N dose [kg/ha]",
-          ylab  = "top yield [t/ha]",
+          xlab  = expression("N dose [ kg."~ha^-1~"]"),
+          ylab  = expression("top yield [ t."~ha^-1~"]"),
           xaxt  = "n",
           cex   = 1.3,
           cex.lab=1.3, 
@@ -412,7 +418,9 @@ axis(1, at = tf$dose, labels = tf$dose,
 #text(40,33, "y = 17.4037+0.0639(x-122.2971)", col = "blue", cex=0.9)
 mtext("y = 17.4037+0.0339(x-180.8333)", side = 3, line = 0,
       outer = FALSE, cex = 1, col = "blue")
-  
+
+dev.copy(device = png, filename = 'plots/fym_top_TBmod.png', width = 450, height = 300) #to be modified
+dev.off()  
 
 ## TUBE FYM / done
 
@@ -436,13 +444,14 @@ model_tubefym = nls(tuber ~ linplat(dose, a, b, clx), # Find best fit parameters
 
 summary(model_tubefym)
 
+par(mar=c(4,5,3,2))
 plotPredy(data  = tube_fym,
           x     = dose,
           y     = tuber,
           model = model_tubefym,
           main  = "FYM",
-          xlab  = "N dose [kg/ha]",
-          ylab  = "tuber yield [t/ha]",
+          xlab  = expression("N dose [ kg."~ha^-1~"]"),
+          ylab  = expression("tuber yield [ t."~ha^-1~"]"),
           xaxt  = "n", 
           cex   = 1.3,
           cex.lab=1.3, 
@@ -453,6 +462,9 @@ axis(1, at = tube_fym$dose, labels = tube_fym$dose,
 # text(105,50, "y = 52.9120+0.0789(x-165.4596)", col = "blue", cex=0.9)
 mtext("y = 52.9120+0.0789(x-165.4596)", side = 3, line = 0,
       outer = FALSE, cex = 1, col = "blue")
+
+dev.copy(device = png, filename = 'plots/fym_tuber.png', width = 450, height = 300) 
+dev.off()
 
 ## TUBE NPK / done
 
@@ -476,15 +488,14 @@ model_tubenpk = nls(tuber ~ linplat(dose, a, b, clx), # Find best fit parameters
 
 summary(model_tubenpk)
 
-# par(mar = c(6,0,0,0))
-# par(oma = c(1,0,0,0))
+par(mar=c(4,5,3,2))
 plotPredy(data  = tube_npk,
           x     = dose,
           y     = tuber,
           model = model_tubenpk,
           main  = "NPK",
-          xlab  = "N dose [kg/ha]", 
-          ylab  = "tuber yield [t/ha]",
+          xlab  = expression("N dose [ kg."~ha^-1~"]"),
+          ylab  = expression("tuber yield [ t."~ha^-1~"]"),
           xaxt  = "n",
           cex   = 1.3,
           cex.lab=1.3, 
@@ -495,6 +506,9 @@ axis(1, at = tube_npk$dose, labels = tube_npk$dose,
 # text(140,55, "y = 52.9120+0.1046(x-111.5920)", col = "blue", cex=0.9)
 mtext("y = 52.9120+0.1046(x-111.5920)", side = 3, line = 0,
       outer = FALSE, cex = 1, col = "blue")
+
+dev.copy(device = png, filename = 'plots/npk_tuber.png', width = 450, height = 300) 
+dev.off()
 
 # TOPFYM issue ------------------------------------------------------------
 
