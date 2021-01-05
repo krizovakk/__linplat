@@ -451,7 +451,7 @@ plotPredy(data  = tube_fym,
           model = model_tubefym,
           main  = "FYM",
           xlab  = expression("N dose [ kg."~ha^-1~"]"),
-          ylab  = expression("tuber yield [ t."~ha^-1~"]"),
+          ylab  = expression("beetroot yield [ t."~ha^-1~"]"),
           xaxt  = "n", 
           cex   = 1.3,
           cex.lab=1.3, 
@@ -463,7 +463,7 @@ axis(1, at = tube_fym$dose, labels = tube_fym$dose,
 mtext("y = 52.9120+0.0789(x-165.4596)", side = 3, line = 0,
       outer = FALSE, cex = 1, col = "blue")
 
-dev.copy(device = png, filename = 'plots/fym_tuber.png', width = 450, height = 300) 
+dev.copy(device = png, filename = 'plots/fym_beetroot.png', width = 450, height = 300) 
 dev.off()
 
 ## TUBE NPK / done
@@ -495,7 +495,7 @@ plotPredy(data  = tube_npk,
           model = model_tubenpk,
           main  = "NPK",
           xlab  = expression("N dose [ kg."~ha^-1~"]"),
-          ylab  = expression("tuber yield [ t."~ha^-1~"]"),
+          ylab  = expression("beetroot yield [ t."~ha^-1~"]"),
           xaxt  = "n",
           cex   = 1.3,
           cex.lab=1.3, 
@@ -507,7 +507,7 @@ axis(1, at = tube_npk$dose, labels = tube_npk$dose,
 mtext("y = 52.9120+0.1046(x-111.5920)", side = 3, line = 0,
       outer = FALSE, cex = 1, col = "blue")
 
-dev.copy(device = png, filename = 'plots/npk_tuber.png', width = 450, height = 300) 
+dev.copy(device = png, filename = 'plots/npk_beetroot.png', width = 450, height = 300) 
 dev.off()
 
 # TOPFYM issue ------------------------------------------------------------
